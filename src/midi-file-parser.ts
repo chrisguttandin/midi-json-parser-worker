@@ -32,8 +32,6 @@ const _parseEvent = (dataView, offset, lastEvent) => {
 
     ({ offset, value: delta } = _readVariableLengthQuantity(dataView, offset)); // tslint:disable-line:no-use-before-declare
 
-    offset += 1;
-
     const eventTypeByte = dataView.getUint8(offset);
 
     if (eventTypeByte === 0xF0) {  // tslint:disable-line:no-bitwise
@@ -82,15 +80,15 @@ const _parseMetaEvent = (dataView, offset) => {
 
     if (metaTypeByte === 0x03) {  // tslint:disable-line:no-bitwise
         event = {
-            trackName: stringify(dataView, offset + 1, length)
+            trackName: stringify(dataView, offset, length)
         };
     } else if (metaTypeByte === 0x20) {  // tslint:disable-line:no-bitwise
         event = {
-            channelPrefix: dataView.getUint8(offset + 1)
+            channelPrefix: dataView.getUint8(offset)
         };
     } else if (metaTypeByte === 0x21) {  // tslint:disable-line:no-bitwise
         event = {
-            midiPort: dataView.getUint8(offset + 1)
+            midiPort: dataView.getUint8(offset)
         };
     } else if (metaTypeByte === 0x2F) {  // tslint:disable-line:no-bitwise
 
@@ -106,9 +104,9 @@ const _parseMetaEvent = (dataView, offset) => {
         event = {
             setTempo: {
                 microsecondsPerBeat: (
-                    (dataView.getUint8(offset + 1) << 16) + // tslint:disable-line:no-bitwise
-                    (dataView.getUint8(offset + 2) << 8) + // tslint:disable-line:no-bitwise
-                    dataView.getUint8(offset + 3)
+                    (dataView.getUint8(offset) << 16) + // tslint:disable-line:no-bitwise
+                    (dataView.getUint8(offset + 1) << 8) + // tslint:disable-line:no-bitwise
+                    dataView.getUint8(offset + 2)
                 )
             }
         };
@@ -117,7 +115,7 @@ const _parseMetaEvent = (dataView, offset) => {
 
         // @todo length must be 5
 
-        const hourByte = dataView.getUint8(offset + 1);
+        const hourByte = dataView.getUint8(offset);
 
         if ((hourByte & 0x60) === 0x00) {  // tslint:disable-line:no-bitwise
             frameRate = 24;
@@ -131,21 +129,21 @@ const _parseMetaEvent = (dataView, offset) => {
 
         event = {
             smpteOffset: {
-                frame: dataView.getUint8(offset + 4),
+                frame: dataView.getUint8(offset + 3),
                 frameRate,
                 hour: hourByte & 0x1F,  // tslint:disable-line:no-bitwise
-                minutes: dataView.getUint8(offset + 2),
-                seconds: dataView.getUint8(offset + 3),
-                subFrame: dataView.getUint8(offset + 5)
+                minutes: dataView.getUint8(offset + 1),
+                seconds: dataView.getUint8(offset + 2),
+                subFrame: dataView.getUint8(offset + 4)
             }
         };
     } else if (metaTypeByte === 0x58) {  // tslint:disable-line:no-bitwise
         event = {
             timeSignature: {
-                denominator: Math.pow(2, dataView.getUint8(offset + 2)),
-                metronome: dataView.getUint8(offset + 3),
-                numerator: dataView.getUint8(offset + 1),
-                thirtyseconds: dataView.getUint8(offset + 4)
+                denominator: Math.pow(2, dataView.getUint8(offset + 1)),
+                metronome: dataView.getUint8(offset + 2),
+                numerator: dataView.getUint8(offset),
+                thirtyseconds: dataView.getUint8(offset + 3)
             }
         };
     } else if (metaTypeByte === 0x59) {  // tslint:disable-line:no-bitwise
@@ -154,8 +152,8 @@ const _parseMetaEvent = (dataView, offset) => {
 
         event = {
             keySignature: {
-                key: dataView.getInt8(offset + 1),
-                scale: dataView.getInt8(offset + 2)
+                key: dataView.getInt8(offset),
+                scale: dataView.getInt8(offset + 1)
             }
         };
     } else {
@@ -164,7 +162,7 @@ const _parseMetaEvent = (dataView, offset) => {
 
     return {
         event,
-        offset: offset + length + 1
+        offset: offset + length
     };
 };
 
@@ -249,9 +247,9 @@ const _parseSysexEvent = (dataView, offset) => {
 
     return {
         event: {
-            sysex: hexify(dataView, offset + 1, length)
+            sysex: hexify(dataView, offset, length)
         },
-        offset: offset + length + 1
+        offset: offset + length
     };
 };
 
@@ -286,10 +284,11 @@ const _readVariableLengthQuantity = (dataView, offset) => {
     while (true) {
         let byte = dataView.getUint8(offset);
 
-        if (byte & 0x80) {  // tslint:disable-line:no-bitwise
-            value += (byte & 0x7f);  // tslint:disable-line:no-bitwise
+        offset += 1;
+
+        if (byte > 127) {
+            value += (byte & 0x7F); // tslint:disable-line:no-bitwise
             value <<= 7; // tslint:disable-line:no-bitwise
-            offset += 1;
         } else {
             value += byte;
 
