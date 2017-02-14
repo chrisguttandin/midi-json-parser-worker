@@ -25,6 +25,10 @@ module.exports = (config) => {
             'sinon-chai'
         ],
 
+        mime: {
+            'text/x-typescript': [ 'ts', 'tsx' ]
+        },
+
         preprocessors: {
             'src/**/*.ts': 'webpack',
             'test/unit/**/*.js': 'webpack'
