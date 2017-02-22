@@ -2,7 +2,7 @@ import { parseArrayBuffer } from './midi-file-parser';
 
 const arrayBuffers = new Map();
 
-self.addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index } }) => {
+addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index } }) => {
     let completeArrayBuffer = arrayBuffers.get(index);
 
     if (completeArrayBuffer === undefined) {
@@ -22,12 +22,12 @@ self.addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, 
 
     if (length === byteLength) {
         try {
-            self.postMessage({
+            postMessage({
                 index,
                 midiFile: parseArrayBuffer(completeArrayBuffer)
             });
         } catch (err) {
-            self.postMessage({
+            postMessage({
                 err: {
                     message: err.message
                 },
