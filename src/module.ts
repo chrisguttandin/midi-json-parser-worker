@@ -1,7 +1,13 @@
-import { IMidiFile, IMidiJsonParserRequestEvent, IMidiJsonParserRequestEventData, IMidiJsonParserResponseEventData } from './interfaces';
+import {
+    IMidiEvent,
+    IMidiFile,
+    IMidiJsonParserRequestEvent,
+    IMidiJsonParserRequestEventData,
+    IMidiJsonParserResponseEventData
+} from './interfaces';
 import { parseArrayBuffer } from './midi-file-parser';
 
-export { IMidiFile, IMidiJsonParserRequestEvent, IMidiJsonParserRequestEventData, IMidiJsonParserResponseEventData };
+export { IMidiEvent, IMidiFile, IMidiJsonParserRequestEvent, IMidiJsonParserRequestEventData, IMidiJsonParserResponseEventData };
 
 const arrayBuffers: Map<number, ArrayBuffer> = new Map();
 
