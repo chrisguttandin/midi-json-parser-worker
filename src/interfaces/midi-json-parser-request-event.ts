@@ -1,4 +1,4 @@
-export interface IMidiJsonParserEvent extends Event {
+export interface IMidiJsonParserRequestEvent extends Event {
 
     data: {
 

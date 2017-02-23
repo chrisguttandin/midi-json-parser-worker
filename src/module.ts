@@ -1,11 +1,11 @@
-import { IMidiJsonParserEvent } from './interfaces';
+import { IMidiJsonParserRequestEvent, IMidiJsonParserResponseEventData } from './interfaces';
 import { parseArrayBuffer } from './midi-file-parser';
 
-export { IMidiJsonParserEvent };
+export { IMidiJsonParserRequestEvent, IMidiJsonParserResponseEventData };
 
 const arrayBuffers: Map<number, ArrayBuffer> = new Map();
 
-addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index } }: IMidiJsonParserEvent) => {
+addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index } }: IMidiJsonParserRequestEvent) => {
     let completeArrayBuffer = arrayBuffers.get(index);
 
     if (completeArrayBuffer === undefined) {
@@ -25,12 +25,12 @@ addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index
 
     if (length === byteLength) {
         try {
-            postMessage({
+            postMessage(<IMidiJsonParserResponseEventData> {
                 index,
                 midiFile: parseArrayBuffer(completeArrayBuffer)
             });
         } catch (err) {
-            postMessage({
+            postMessage(<IMidiJsonParserResponseEventData> {
                 err: {
                     message: err.message
                 },
