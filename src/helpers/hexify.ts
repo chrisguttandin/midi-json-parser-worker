@@ -1,7 +1,7 @@
 /**
  * This function turns a part of a given ArrayBuffer into a hexadecimal String.
  */
-export const hexify = (dataView, offset = 0, length = dataView.byteLength - (offset - dataView.byteOffset)) => {
+export const hexify = (dataView: DataView, offset = 0, length = dataView.byteLength - (offset - dataView.byteOffset)) => {
     offset += dataView.byteOffset;
 
     const hexArray = [];

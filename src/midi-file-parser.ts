@@ -1,7 +1,25 @@
 import { hexify } from './helpers/hexify';
 import { stringify } from './helpers/stringify';
+import {
+    IMidiChannelPrefixEvent,
+    IMidiControlChangeEvent,
+    IMidiEndOfTrackEvent,
+    IMidiEvent,
+    IMidiKeySignatureEvent,
+    IMidiMetaEvent,
+    IMidiMidiPortEvent,
+    IMidiNoteOffEvent,
+    IMidiNoteOnEvent,
+    IMidiPitchBendEvent,
+    IMidiProgramChangeEvent,
+    IMidiSetTempoEvent,
+    IMidiSmpteOffsetEvent,
+    IMidiSysexEvent,
+    IMidiTimeSingatureEvent,
+    IMidiTrackNameEvent
+} from './interfaces';
 
-export const parseArrayBuffer = (arrayBuffer) => {
+export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     const dataView = new DataView(arrayBuffer);
 
     const header = _parseHeaderChunk(dataView); // tslint:disable-line:no-use-before-declare
@@ -25,10 +43,10 @@ export const parseArrayBuffer = (arrayBuffer) => {
     };
 };
 
-const _parseEvent = (dataView, offset, lastEvent) => {
+const _parseEvent = (dataView: DataView, offset: number, lastEvent: IMidiEvent): { event: IMidiEvent, offset: number } => {
     let delta;
 
-    let result;
+    let result: { event: IMidiEvent, offset: number };
 
     ({ offset, value: delta } = _readVariableLengthQuantity(dataView, offset)); // tslint:disable-line:no-use-before-declare
 
@@ -47,7 +65,7 @@ const _parseEvent = (dataView, offset, lastEvent) => {
     return result;
 };
 
-const _parseHeaderChunk = (dataView) => {
+const _parseHeaderChunk = (dataView: DataView) => {
     if (stringify(dataView, 0, 4) !== 'MThd') {
         throw new Error(`Unexpected characters "${ stringify(dataView, 0, 4) }" found instead of "MThd"`);
     }
@@ -69,8 +87,8 @@ const _parseHeaderChunk = (dataView) => {
     };
 };
 
-const _parseMetaEvent = (dataView, offset) => {
-    let event;
+const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMetaEvent, offset: number } => {
+    let event: IMidiMetaEvent;
 
     let length;
 
@@ -79,29 +97,29 @@ const _parseMetaEvent = (dataView, offset) => {
     ({ offset, value: length } = _readVariableLengthQuantity(dataView, offset + 1)); // tslint:disable-line:no-use-before-declare
 
     if (metaTypeByte === 0x03) {  // tslint:disable-line:no-bitwise
-        event = {
+        event = <IMidiTrackNameEvent> {
             trackName: stringify(dataView, offset, length)
         };
     } else if (metaTypeByte === 0x20) {  // tslint:disable-line:no-bitwise
-        event = {
+        event = <IMidiChannelPrefixEvent> {
             channelPrefix: dataView.getUint8(offset)
         };
     } else if (metaTypeByte === 0x21) {  // tslint:disable-line:no-bitwise
-        event = {
+        event = <IMidiMidiPortEvent> {
             midiPort: dataView.getUint8(offset)
         };
     } else if (metaTypeByte === 0x2F) {  // tslint:disable-line:no-bitwise
 
         // @todo length must be 0
 
-        event = {
+        event = <IMidiEndOfTrackEvent> {
             endOfTrack: true
         };
     } else if (metaTypeByte === 0x51) {  // tslint:disable-line:no-bitwise
 
         // @todo length must be 5
 
-        event = {
+        event = <IMidiSetTempoEvent> {
             setTempo: {
                 microsecondsPerBeat: (
                     (dataView.getUint8(offset) << 16) + // tslint:disable-line:no-bitwise
@@ -127,7 +145,7 @@ const _parseMetaEvent = (dataView, offset) => {
             frameRate = 30;
         }
 
-        event = {
+        event = <IMidiSmpteOffsetEvent> {
             smpteOffset: {
                 frame: dataView.getUint8(offset + 3),
                 frameRate,
@@ -138,7 +156,7 @@ const _parseMetaEvent = (dataView, offset) => {
             }
         };
     } else if (metaTypeByte === 0x58) {  // tslint:disable-line:no-bitwise
-        event = {
+        event = <IMidiTimeSingatureEvent> {
             timeSignature: {
                 denominator: Math.pow(2, dataView.getUint8(offset + 1)),
                 metronome: dataView.getUint8(offset + 2),
@@ -150,7 +168,7 @@ const _parseMetaEvent = (dataView, offset) => {
 
         // @todo length must be 2
 
-        event = {
+        event = <IMidiKeySignatureEvent> {
             keySignature: {
                 key: dataView.getInt8(offset),
                 scale: dataView.getInt8(offset + 1)
@@ -166,8 +184,9 @@ const _parseMetaEvent = (dataView, offset) => {
     };
 };
 
-const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
-    let event;
+const _parseMidiEvent =
+        (statusByte: number, dataView: DataView, offset: number, lastEvent: IMidiEvent): { event: IMidiEvent, offset: number } => {
+    let event: IMidiEvent;
 
     const eventType = statusByte >> 4; // tslint:disable-line:no-bitwise
 
@@ -177,8 +196,8 @@ const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
         lastEvent = null;
     }
 
-    if (eventType === 0x08 || (lastEvent !== null && lastEvent.noteOff !== undefined)) {  // tslint:disable-line:no-bitwise
-        event = {
+    if (eventType === 0x08 || (lastEvent !== null && 'noteOff' in lastEvent)) {  // tslint:disable-line:no-bitwise
+        event = <IMidiNoteOffEvent> {
             noteOff: {
                 noteNumber: dataView.getUint8(offset),
                 velocity: dataView.getUint8(offset + 1)
@@ -186,20 +205,20 @@ const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
         };
 
         offset += 2;
-    } else if (eventType === 0x09 || (lastEvent !== null && lastEvent.noteOn !== undefined)) {  // tslint:disable-line:no-bitwise
+    } else if (eventType === 0x09 || (lastEvent !== null && 'noteOn' in lastEvent)) {  // tslint:disable-line:no-bitwise
         const noteNumber = dataView.getUint8(offset);
 
         const velocity = dataView.getUint8(offset + 1);
 
         if (velocity === 0) {
-            event = {
+            event = <IMidiNoteOffEvent> {
                 noteOff: {
                     noteNumber,
                     velocity
                 }
             };
         } else {
-            event = {
+            event = <IMidiNoteOnEvent> {
                 noteOn: {
                     noteNumber,
                     velocity
@@ -208,8 +227,8 @@ const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
         }
 
         offset += 2;
-    } else if (eventType === 0x0B || (lastEvent !== null && lastEvent.controlChange !== undefined)) {  // tslint:disable-line:no-bitwise
-        event = {
+    } else if (eventType === 0x0B || (lastEvent !== null && 'controlChange' in lastEvent)) {  // tslint:disable-line:no-bitwise
+        event = <IMidiControlChangeEvent> {
             controlChange: {
                 type: dataView.getUint8(offset),
                 value: dataView.getUint8(offset + 1)
@@ -217,16 +236,16 @@ const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
         };
 
         offset += 2;
-    } else if (eventType === 0x0C || (lastEvent !== null && lastEvent.programChange !== undefined)) {  // tslint:disable-line:no-bitwise
-        event = {
+    } else if (eventType === 0x0C || (lastEvent !== null && 'programChange' in lastEvent)) {  // tslint:disable-line:no-bitwise
+        event = <IMidiProgramChangeEvent> {
             programChange: {
                 programNumber: dataView.getUint8(offset)
             }
         };
 
         offset += 1;
-    } else if (eventType === 0x0E || (lastEvent !== null && lastEvent.pitchBend !== undefined)) {  // tslint:disable-line:no-bitwise
-        event = {
+    } else if (eventType === 0x0E || (lastEvent !== null && 'pitchBend' in lastEvent)) {  // tslint:disable-line:no-bitwise
+        event = <IMidiPitchBendEvent> {
             pitchBend: dataView.getUint8(offset) | (dataView.getUint8(offset + 1) << 7) // tslint:disable-line:no-bitwise
         };
 
@@ -240,20 +259,20 @@ const _parseMidiEvent = (statusByte, dataView, offset, lastEvent) => {
     return { event, offset };
 };
 
-const _parseSysexEvent = (dataView, offset) => {
+const _parseSysexEvent = (dataView: DataView, offset: number): { event: IMidiSysexEvent, offset: number } => {
     let length;
 
     ({ offset, value: length } = _readVariableLengthQuantity(dataView, offset)); // tslint:disable-line:no-use-before-declare
 
     return {
-        event: {
+        event: <IMidiSysexEvent> {
             sysex: hexify(dataView, offset, length)
         },
         offset: offset + length
     };
 };
 
-const _parseTrackChunk = (dataView, offset) => {
+const _parseTrackChunk = (dataView: DataView, offset: number) => {
     if (stringify(dataView, offset, 4) !== 'MTrk') {
         throw new Error(`Unexpected characters "${ stringify(dataView, offset, 4) }" found instead of "MTrk"`);
     }
@@ -278,7 +297,7 @@ const _parseTrackChunk = (dataView, offset) => {
     };
 };
 
-const _readVariableLengthQuantity = (dataView, offset) => {
+const _readVariableLengthQuantity = (dataView: DataView, offset: number) => {
     let value = 0;
 
     while (true) {
