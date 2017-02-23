@@ -4,6 +4,7 @@ export * from './midi-end-of-track-event';
 export * from './midi-event';
 export * from './midi-file';
 export * from './midi-key-signature-event';
+export * from './midi-json-parser-request-event-data';
 export * from './midi-json-parser-request-event';
 export * from './midi-json-parser-response-event-data';
 export * from './midi-meta-event';
