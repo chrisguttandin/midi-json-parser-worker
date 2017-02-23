@@ -2,10 +2,10 @@ export interface IMidiJsonParserRequestEventData {
 
     arrayBuffer: ArrayBuffer;
 
-     byteIndex: number;
+    byteIndex: number;
 
-     byteLength: number;
+    byteLength: number;
 
-     index: number;
+    index: number;
 
 }
