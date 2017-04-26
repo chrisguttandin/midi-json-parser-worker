@@ -43,9 +43,9 @@
     "src/"
   ],
   "homepage": "https://github.com/chrisguttandin/midi-json-parser-worker",
-  "jsnext:main": "build/es2015/module.js",
   "license": "MIT",
   "main": "build/es5/bundle.js",
+  "module": "build/es2015/module.js",
   "name": "midi-json-parser-worker",
   "repository": {
     "type": "git",
