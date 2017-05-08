@@ -16,7 +16,7 @@ module.exports = (config) => {
                 served: true,
                 watched: true
             },
-            'test/unit/**/*.js'
+            'test/integration/**/*.js'
         ],
 
         frameworks: [
@@ -31,7 +31,7 @@ module.exports = (config) => {
 
         preprocessors: {
             'src/**/*.ts': 'webpack',
-            'test/unit/**/*.js': 'webpack'
+            'test/integration/**/*.js': 'webpack'
         },
 
         webpack: {

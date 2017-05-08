@@ -7,6 +7,7 @@ module.exports = {
         'uglify'
     ],
     continuous: [
+        // @todo This is broken now.
         'karma:continuous'
     ],
     lint: [
@@ -15,6 +16,7 @@ module.exports = {
         'sh:lint'
     ],
     test: [
-        'karma:test'
+        'karma:test-integration',
+        'karma:test-unit'
     ]
 };
