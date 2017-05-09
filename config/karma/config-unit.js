@@ -26,6 +26,8 @@ module.exports = (config) => {
             }
         },
 
+        concurrency: 2,
+
         files: [
             {
                 included: false,
