@@ -10,6 +10,6 @@ export interface IMidiJsonParserResponseEventData {
 
     index: number;
 
-    midiFile: IMidiFile;
+    midiFile: null | IMidiFile;
 
 }

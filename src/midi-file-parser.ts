@@ -43,7 +43,7 @@ export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     };
 };
 
-const _parseEvent = (dataView: DataView, offset: number, lastEvent: IMidiEvent): { event: IMidiEvent, offset: number } => {
+const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | IMidiEvent): { event: IMidiEvent, offset: number } => {
     let delta;
 
     let result: { event: IMidiEvent, offset: number };
@@ -185,7 +185,7 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMeta
 };
 
 const _parseMidiEvent =
-        (statusByte: number, dataView: DataView, offset: number, lastEvent: IMidiEvent): { event: IMidiEvent, offset: number } => {
+        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | IMidiEvent): { event: IMidiEvent, offset: number } => {
     let event: IMidiEvent;
 
     const eventType = statusByte >> 4; // tslint:disable-line:no-bitwise
