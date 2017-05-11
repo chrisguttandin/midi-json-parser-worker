@@ -1,5 +1,4 @@
 import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixture';
-import { transferSlice } from '../helper/transfer-slice';
 
 describe('module', () => {
 
@@ -10,16 +9,19 @@ describe('module', () => {
         ['SubTractor 2']
     ], (filename) => {
 
+        let id;
         let worker;
 
         beforeEach(() => {
+            id = 63;
+
             worker = new Worker('base/src/module.ts');
         });
 
         it('should parse the midi file', function (done) {
             this.timeout(6000);
 
-            loadFixtureAsJson(filename + '.json', (err, json) => {
+            loadFixtureAsJson(filename + '.json', (err, midiFile) => {
                 expect(err).to.be.null;
 
                 loadFixtureAsArrayBuffer(filename + '.mid', (err, arrayBuffer) => {
@@ -27,14 +29,21 @@ describe('module', () => {
 
                     worker.addEventListener('message', ({ data }) => {
                         expect(data).to.deep.equal({
-                            index: 0,
-                            midiFile: json
+                            error: null,
+                            id,
+                            result: { midiFile }
                         });
 
                         done();
                     });
 
-                    transferSlice(arrayBuffer, worker, 0);
+                    worker.postMessage({
+                        id,
+                        method: 'parse',
+                        params: { arrayBuffer }
+                    }, [
+                        arrayBuffer
+                    ]);
                 });
             });
         });
@@ -47,17 +56,23 @@ describe('module', () => {
 
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
-                        err: {
+                        error: {
                             message: 'Unexpected characters "{\n  " found instead of "MThd"'
                         },
-                        index: 0,
-                        midiFile: null
+                        id,
+                        result: null
                     });
 
                     done();
                 });
 
-                transferSlice(arrayBuffer, worker, 0);
+                worker.postMessage({
+                    id,
+                    method: 'parse',
+                    params: { arrayBuffer }
+                }, [
+                    arrayBuffer
+                ]);
             });
         });
 

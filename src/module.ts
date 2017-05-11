@@ -1,50 +1,31 @@
-import {
-    IMidiEvent,
-    IMidiFile,
-    IMidiJsonParserRequestEvent,
-    IMidiJsonParserRequestEventData,
-    IMidiJsonParserResponseEventData
-} from './interfaces';
+import { IBrokerEvent, IErrorResponse, IParseResponse } from './interfaces';
 import { parseArrayBuffer } from './midi-file-parser';
 
-export { IMidiEvent, IMidiFile, IMidiJsonParserRequestEvent, IMidiJsonParserRequestEventData, IMidiJsonParserResponseEventData };
+export * from './interfaces';
+export * from './types';
 
-const arrayBuffers: Map<number, ArrayBuffer> = new Map();
+addEventListener('message', ({ data }: IBrokerEvent) => {
+    try {
+        if (data.method === 'parse') {
+            const { id, params: { arrayBuffer } } = data;
 
-addEventListener('message', ({ data: { arrayBuffer, byteIndex, byteLength, index } }: IMidiJsonParserRequestEvent) => {
-    let completeArrayBuffer = arrayBuffers.get(index);
+            const midiFile = parseArrayBuffer(arrayBuffer);
 
-    if (completeArrayBuffer === undefined) {
-        completeArrayBuffer = new ArrayBuffer(byteLength);
-        arrayBuffers.set(index, completeArrayBuffer);
-    }
-
-    const destination = new Uint8Array(completeArrayBuffer);
-
-    const length = Math.min(byteIndex + 1048576, byteLength);
-
-    const source = new Uint8Array(arrayBuffer);
-
-    for (let i = byteIndex; i < length; i += 1) {
-        destination[i] = source[i - byteIndex];
-    }
-
-    if (length === byteLength) {
-        try {
-            postMessage(<IMidiJsonParserResponseEventData> {
-                index,
-                midiFile: parseArrayBuffer(completeArrayBuffer)
+            postMessage(<IParseResponse> {
+                error: null,
+                id,
+                result: { midiFile }
             });
-        } catch (err) {
-            postMessage(<IMidiJsonParserResponseEventData> {
-                err: {
-                    message: err.message
-                },
-                index,
-                midiFile: null
-            });
+        } else {
+           throw new Error(`The given method "${ (<any> data).method }" is not supported`);
         }
-
-        arrayBuffers.delete(index);
+    } catch (err) {
+        postMessage(<IErrorResponse> {
+            error: {
+                message: err.message
+            },
+            id: data.id,
+            result: null
+        });
     }
 });
