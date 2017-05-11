@@ -19,3 +19,4 @@ export * from './midi-time-singature-event';
 export * from './midi-track-name-event';
 export * from './parse-request';
 export * from './parse-response';
+export * from './worker-event';
