@@ -86,7 +86,7 @@ module.exports = (config) => {
 
         config.set({
 
-            browserNoActivityTimeout: 40000,
+            browserNoActivityTimeout: 120000,
 
             browsers: [
                 'ChromeSauceLabs',
