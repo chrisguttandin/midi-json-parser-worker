@@ -3,10 +3,10 @@ import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixt
 describe('module', () => {
 
     leche.withData([ // eslint-disable-line no-undef
-        ['because'],
-        ['scale'],
-        ['SubTractor 1'],
-        ['SubTractor 2']
+        [ 'because' ],
+        [ 'scale' ],
+        [ 'SubTractor 1' ],
+        [ 'SubTractor 2' ]
     ], (filename) => {
 
         let id;
