@@ -2,7 +2,7 @@ import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixt
 
 describe('module', () => {
 
-    leche.withData([ // eslint-disable-line no-undef
+    leche.withData([
         [ 'because' ],
         [ 'scale' ],
         [ 'SubTractor 1' ],
