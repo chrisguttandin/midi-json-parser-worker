@@ -14,7 +14,7 @@ import {
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
     IMidiSysexEvent,
-    IMidiTimeSingatureEvent,
+    IMidiTimeSignatureEvent,
     IMidiTrackNameEvent
 } from './interfaces';
 import { TMidiEvent } from './types';
@@ -156,7 +156,7 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMeta
             }
         };
     } else if (metaTypeByte === 0x58) {  // tslint:disable-line:no-bitwise
-        event = <IMidiTimeSingatureEvent> {
+        event = <IMidiTimeSignatureEvent> {
             timeSignature: {
                 denominator: Math.pow(2, dataView.getUint8(offset + 1)),
                 metronome: dataView.getUint8(offset + 2),

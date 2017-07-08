@@ -15,7 +15,7 @@ export * from './midi-program-change-event';
 export * from './midi-set-tempo-event';
 export * from './midi-smpte-offset-event';
 export * from './midi-sysex-event';
-export * from './midi-time-singature-event';
+export * from './midi-time-signature-event';
 export * from './midi-track-name-event';
 export * from './parse-request';
 export * from './parse-response';

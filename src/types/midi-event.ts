@@ -12,7 +12,7 @@ import {
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
     IMidiSysexEvent,
-    IMidiTimeSingatureEvent,
+    IMidiTimeSignatureEvent,
     IMidiTrackNameEvent
 } from '../interfaces';
 
@@ -29,5 +29,5 @@ export type TMidiEvent = IMidiChannelPrefixEvent |
     IMidiSetTempoEvent |
     IMidiSmpteOffsetEvent |
     IMidiSysexEvent |
-    IMidiTimeSingatureEvent |
+    IMidiTimeSignatureEvent |
     IMidiTrackNameEvent;

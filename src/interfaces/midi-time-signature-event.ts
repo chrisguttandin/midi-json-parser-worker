@@ -1,6 +1,6 @@
 import { IMidiEvent } from './midi-event';
 
-export interface IMidiTimeSingatureEvent extends IMidiEvent {
+export interface IMidiTimeSignatureEvent extends IMidiEvent {
 
     timeSignature: {
 
