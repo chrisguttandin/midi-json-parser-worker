@@ -4,7 +4,6 @@ import {
     IMidiChannelPrefixEvent,
     IMidiControlChangeEvent,
     IMidiEndOfTrackEvent,
-    IMidiEvent,
     IMidiKeySignatureEvent,
     IMidiMetaEvent,
     IMidiMidiPortEvent,
@@ -18,6 +17,7 @@ import {
     IMidiTimeSingatureEvent,
     IMidiTrackNameEvent
 } from './interfaces';
+import { TMidiEvent } from './types';
 
 export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     const dataView = new DataView(arrayBuffer);
@@ -43,10 +43,10 @@ export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     };
 };
 
-const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | IMidiEvent): { event: IMidiEvent, offset: number } => {
+const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent, offset: number } => {
     let delta;
 
-    let result: { event: IMidiEvent, offset: number };
+    let result: { event: TMidiEvent, offset: number };
 
     ({ offset, value: delta } = _readVariableLengthQuantity(dataView, offset)); // tslint:disable-line:no-use-before-declare
 
@@ -185,8 +185,8 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMeta
 };
 
 const _parseMidiEvent =
-        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | IMidiEvent): { event: IMidiEvent, offset: number } => {
-    let event: IMidiEvent;
+        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent, offset: number } => {
+    let event: TMidiEvent;
 
     const eventType = statusByte >> 4; // tslint:disable-line:no-bitwise
 

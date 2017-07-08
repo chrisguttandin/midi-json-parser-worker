@@ -1,4 +1,4 @@
-import { IMidiEvent } from './midi-event';
+import { TMidiEvent } from '../types';
 
 export interface IMidiFile {
 
@@ -6,6 +6,6 @@ export interface IMidiFile {
 
     format: number;
 
-    tracks: IMidiEvent[][];
+    tracks: TMidiEvent[][];
 
 }
