@@ -17,7 +17,7 @@ import {
     IMidiTimeSignatureEvent,
     IMidiTrackNameEvent
 } from './interfaces';
-import { TMidiEvent } from './types';
+import { TMidiEvent } from './types';
 
 export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     const dataView = new DataView(arrayBuffer);

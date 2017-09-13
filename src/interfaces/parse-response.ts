@@ -1,4 +1,4 @@
-import { IMidiFile } from './midi-file';
+import { IMidiFile } from './midi-file';
 
 export interface IParseResponse {
 
