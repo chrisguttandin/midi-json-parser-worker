@@ -14,6 +14,7 @@ import {
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
     IMidiSysexEvent,
+    IMidiTextEvent,
     IMidiTimeSignatureEvent,
     IMidiTrackNameEvent
 } from './interfaces';
@@ -96,7 +97,11 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMeta
 
     ({ offset, value: length } = _readVariableLengthQuantity(dataView, offset + 1)); // tslint:disable-line:no-use-before-declare
 
-    if (metaTypeByte === 0x03) {  // tslint:disable-line:no-bitwise
+    if (metaTypeByte === 0x01) {  // tslint:disable-line:no-bitwise
+        event = <IMidiTextEvent> {
+            text: stringify(dataView, offset, length)
+        };
+    } else if (metaTypeByte === 0x03) {  // tslint:disable-line:no-bitwise
         event = <IMidiTrackNameEvent> {
             trackName: stringify(dataView, offset, length)
         };
