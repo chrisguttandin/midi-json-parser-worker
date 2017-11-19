@@ -5,6 +5,7 @@ import {
     IMidiControlChangeEvent,
     IMidiEndOfTrackEvent,
     IMidiKeySignatureEvent,
+    IMidiLyricEvent,
     IMidiMetaEvent,
     IMidiMidiPortEvent,
     IMidiNoteOffEvent,
@@ -104,6 +105,10 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMeta
     } else if (metaTypeByte === 0x03) {  // tslint:disable-line:no-bitwise
         event = <IMidiTrackNameEvent> {
             trackName: stringify(dataView, offset, length)
+        };
+    } else if (metaTypeByte === 0x05) {  // tslint:disable-line:no-bitwise
+        event = <IMidiLyricEvent> {
+            lyric: stringify(dataView, offset, length)
         };
     } else if (metaTypeByte === 0x20) {  // tslint:disable-line:no-bitwise
         event = <IMidiChannelPrefixEvent> {
