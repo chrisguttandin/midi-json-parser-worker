@@ -9,6 +9,8 @@ describe('module', () => {
 
     leche.withData([
         [ 'because' ],
+        [ 'MIDIOkFormat1-lyrics' ],
+        [ 'MIDIOkFormat2' ],
         [ 'scale' ],
         [ 'SubTractor 1' ],
         [ 'SubTractor 2' ]
