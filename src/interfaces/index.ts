@@ -7,7 +7,6 @@ export * from './midi-event';
 export * from './midi-file';
 export * from './midi-key-signature-event';
 export * from './midi-lyric-event';
-export * from './midi-meta-event';
 export * from './midi-note-off-event';
 export * from './midi-note-on-event';
 export * from './midi-midi-port-event';

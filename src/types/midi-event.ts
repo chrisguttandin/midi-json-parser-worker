@@ -1,33 +1,17 @@
 import {
-    IMidiChannelPrefixEvent,
     IMidiControlChangeEvent,
-    IMidiEndOfTrackEvent,
-    IMidiKeySignatureEvent,
-    IMidiMetaEvent,
-    IMidiMidiPortEvent,
     IMidiNoteOffEvent,
     IMidiNoteOnEvent,
     IMidiPitchBendEvent,
     IMidiProgramChangeEvent,
-    IMidiSetTempoEvent,
-    IMidiSmpteOffsetEvent,
-    IMidiSysexEvent,
-    IMidiTimeSignatureEvent,
-    IMidiTrackNameEvent
+    IMidiSysexEvent
 } from '../interfaces';
+import { TMidiMetaEvent } from './midi-meta-event';
 
-export type TMidiEvent = IMidiChannelPrefixEvent |
-    IMidiControlChangeEvent |
-    IMidiEndOfTrackEvent |
-    IMidiKeySignatureEvent |
-    IMidiMetaEvent |
-    IMidiMidiPortEvent |
+export type TMidiEvent = IMidiControlChangeEvent |
     IMidiNoteOffEvent |
     IMidiNoteOnEvent |
     IMidiPitchBendEvent |
     IMidiProgramChangeEvent |
-    IMidiSetTempoEvent |
-    IMidiSmpteOffsetEvent |
     IMidiSysexEvent |
-    IMidiTimeSignatureEvent |
-    IMidiTrackNameEvent;
+    TMidiMetaEvent;

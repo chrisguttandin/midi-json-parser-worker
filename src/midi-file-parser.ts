@@ -6,7 +6,6 @@ import {
     IMidiEndOfTrackEvent,
     IMidiKeySignatureEvent,
     IMidiLyricEvent,
-    IMidiMetaEvent,
     IMidiMidiPortEvent,
     IMidiNoteOffEvent,
     IMidiNoteOnEvent,
@@ -19,7 +18,7 @@ import {
     IMidiTimeSignatureEvent,
     IMidiTrackNameEvent
 } from './interfaces';
-import { TMidiEvent } from './types';
+import { TMidiEvent, TMidiMetaEvent } from './types';
 
 export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     const dataView = new DataView(arrayBuffer);
@@ -89,8 +88,8 @@ const _parseHeaderChunk = (dataView: DataView) => {
     };
 };
 
-const _parseMetaEvent = (dataView: DataView, offset: number): { event: IMidiMetaEvent, offset: number } => {
-    let event: IMidiMetaEvent;
+const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMetaEvent, offset: number } => {
+    let event: TMidiMetaEvent;
 
     let length;
 
