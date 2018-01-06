@@ -36,9 +36,8 @@ describe('module', () => {
 
                     worker.addEventListener('message', ({ data }) => {
                         expect(data).to.deep.equal({
-                            error: null,
                             id,
-                            result: { midiFile }
+                            result: midiFile
                         });
 
                         done();
@@ -64,10 +63,10 @@ describe('module', () => {
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
                         error: {
+                            code: -32603,
                             message: 'Unexpected characters "{\n  " found instead of "MThd"'
                         },
-                        id,
-                        result: null
+                        id
                     });
 
                     done();

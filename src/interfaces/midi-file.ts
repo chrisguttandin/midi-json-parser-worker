@@ -1,6 +1,7 @@
+import { IValueMap } from 'worker-factory';
 import { TMidiEvent } from '../types';
 
-export interface IMidiFile {
+export interface IMidiFile extends IValueMap {
 
     division: number;
 
