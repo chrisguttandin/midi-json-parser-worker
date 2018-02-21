@@ -1,3 +1,6 @@
 {
+  "compilerOptions": {
+    "strictFunctionTypes": false
+  },
   "extends": "../node_modules/tsconfig-holy-grail/src/tsconfig-web-worker"
 }
