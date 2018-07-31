@@ -20,8 +20,8 @@ describe('midiFileParser', () => {
                 loadFixtureAsJson(filename + '.json', (err, json) => {
                     expect(err).to.be.null;
 
-                    loadFixtureAsArrayBuffer(filename + '.mid', (err, arrayBuffer) => {
-                        expect(err).to.be.null;
+                    loadFixtureAsArrayBuffer(filename + '.mid', (rr, arrayBuffer) => {
+                        expect(rr).to.be.null;
 
                         expect(midiFileParser.parseArrayBuffer(arrayBuffer)).to.deep.equal(json);
 
