@@ -259,8 +259,6 @@ const _parseMidiEvent =
         };
 
         sanitizedOffset += 2;
-    } else {
-        throw new Error(`Cannot parse a midi event with a type of "${ eventType.toString(16) }"`);
     }
 
     event.channel = statusByte & 0x0F;  // tslint:disable-line:no-bitwise
