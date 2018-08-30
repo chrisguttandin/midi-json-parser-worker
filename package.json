@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "tslib": "^1.9.3",
-    "worker-factory": "^2.5.3"
+    "worker-factory": "^2.5.5"
   },
   "description": "The worker which is used by the midi-json-parser package.",
   "devDependencies": {
