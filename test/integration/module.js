@@ -22,7 +22,7 @@ describe('module', () => {
         beforeEach(() => {
             id = 63;
 
-            worker = new Worker('base/src/module.ts');
+            worker = new Worker('base/src/module.js');
         });
 
         it('should parse the midi file', function (done) {
