@@ -11,7 +11,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "tslib": "^1.9.3",
-    "worker-factory": "^3.0.0"
+    "worker-factory": "^3.0.1"
   },
   "description": "The worker which is used by the midi-json-parser package.",
   "devDependencies": {
