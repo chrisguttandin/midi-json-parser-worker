@@ -6,5 +6,6 @@ export const stringify = (dataView: DataView, offset = 0, length = dataView.byte
 
     const array = new Uint8Array(dataView.buffer, byteOffset, length);
 
-    return String.fromCharCode.apply(null, array);
+    // String.fromCharCode() does normally expect numbers but it can also handle a typed array.
+    return String.fromCharCode.apply(null, <number[]> (<any> array));
 };
