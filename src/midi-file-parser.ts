@@ -44,8 +44,8 @@ export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     };
 };
 
-const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent, offset: number } => {
-    let result: { event: TMidiEvent, offset: number };
+const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent; offset: number } => {
+    let result: { event: TMidiEvent; offset: number };
 
     const { offset: nextOffset, value: delta } = _readVariableLengthQuantity( // tslint:disable-line:no-use-before-declare
         dataView,
@@ -89,7 +89,7 @@ const _parseHeaderChunk = (dataView: DataView) => {
     };
 };
 
-const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMetaEvent, offset: number } => {
+const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMetaEvent; offset: number } => {
     let event: TMidiMetaEvent;
 
     const metaTypeByte = dataView.getUint8(offset);
@@ -195,7 +195,7 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
 };
 
 const _parseMidiEvent =
-        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent, offset: number } => {
+        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent; offset: number } => {
     const eventType = statusByte >> 4; // tslint:disable-line:no-bitwise
     const sanitizedLastEvent = ((statusByte & 0x80) === 0) ? lastEvent : null; // tslint:disable-line:no-bitwise
 
@@ -268,7 +268,7 @@ const _parseMidiEvent =
     return { event, offset: sanitizedOffset };
 };
 
-const _parseSysexEvent = (dataView: DataView, offset: number): { event: IMidiSysexEvent, offset: number } => {
+const _parseSysexEvent = (dataView: DataView, offset: number): { event: IMidiSysexEvent; offset: number } => {
     const { offset: nextOffset, value: length } = _readVariableLengthQuantity( // tslint:disable-line:no-use-before-declare
         dataView,
         offset
