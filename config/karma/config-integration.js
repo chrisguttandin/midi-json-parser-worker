@@ -8,8 +8,6 @@ module.exports = (config) => {
 
         browserNoActivityTimeout: 50000,
 
-        concurrency: 2,
-
         files: [
             {
                 included: false,
@@ -106,7 +104,9 @@ module.exports = (config) => {
                 'FirefoxHeadless',
                 'FirefoxDeveloperHeadless',
                 'Safari'
-            ]
+            ],
+
+            concurrency: 2
 
         });
 
