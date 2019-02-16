@@ -3,6 +3,7 @@ import { stringify } from './helpers/stringify';
 import {
     IMidiChannelPrefixEvent,
     IMidiControlChangeEvent,
+    IMidiCopyrightNoticeEvent,
     IMidiEndOfTrackEvent,
     IMidiInstrumentNameEvent,
     IMidiKeySignatureEvent,
@@ -102,6 +103,10 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
     if (metaTypeByte === 0x01) { // tslint:disable-line:no-bitwise
         event = <IMidiTextEvent> {
             text: stringify(dataView, nextOffset, length)
+        };
+    } else if (metaTypeByte === 0x02) { // tslint:disable-line:no-bitwise
+        event = <IMidiCopyrightNoticeEvent> {
+            copyrightNotice: stringify(dataView, nextOffset, length)
         };
     } else if (metaTypeByte === 0x03) { // tslint:disable-line:no-bitwise
         event = <IMidiTrackNameEvent> {

@@ -11,6 +11,7 @@ describe('module', () => {
         [ 'because' ],
         [ 'MIDIOkFormat1-lyrics' ],
         [ 'MIDIOkFormat2' ],
+        [ 'minute_waltz' ],
         [ 'scale' ],
         [ 'SubTractor 1' ],
         [ 'SubTractor 2' ],
