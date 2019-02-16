@@ -289,7 +289,7 @@
                     "noteNumber": 67,
                     "velocity": 47
                 },
-                "channel": 3,
+                "channel": 0,
                 "delta": 0
             },
             {
@@ -545,7 +545,7 @@
                     "noteNumber": 72,
                     "velocity": 61
                 },
-                "channel": 8,
+                "channel": 0,
                 "delta": 0
             },
             {
@@ -657,7 +657,7 @@
                     "noteNumber": 58,
                     "velocity": 0
                 },
-                "channel": 10,
+                "channel": 0,
                 "delta": 0
             },
             {
@@ -721,7 +721,7 @@
                     "noteNumber": 55,
                     "velocity": 57
                 },
-                "channel": 7,
+                "channel": 0,
                 "delta": 0
             },
             {
@@ -1529,7 +1529,7 @@
                     "noteNumber": 53,
                     "velocity": 0
                 },
-                "channel": 5,
+                "channel": 0,
                 "delta": 0
             },
             {
@@ -1673,7 +1673,7 @@
                     "noteNumber": 72,
                     "velocity": 0
                 },
-                "channel": 8,
+                "channel": 0,
                 "delta": 0
             },
             {
