@@ -13,6 +13,7 @@ export * from './midi-note-on-event';
 export * from './midi-midi-port-event';
 export * from './midi-pitch-bend-event';
 export * from './midi-program-change-event';
+export * from './midi-sequencer-specific-event';
 export * from './midi-set-tempo-event';
 export * from './midi-smpte-offset-event';
 export * from './midi-sysex-event';

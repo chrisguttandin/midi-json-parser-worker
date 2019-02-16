@@ -13,6 +13,7 @@ import {
     IMidiNoteOnEvent,
     IMidiPitchBendEvent,
     IMidiProgramChangeEvent,
+    IMidiSequencerSpecificEvent,
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
     IMidiSysexEvent,
@@ -193,6 +194,10 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
                 key: dataView.getInt8(nextOffset),
                 scale: dataView.getInt8(nextOffset + 1)
             }
+        };
+    } else if (metaTypeByte === 0x7F) { // tslint:disable-line:no-bitwise
+        event = <IMidiSequencerSpecificEvent> {
+            sequencerSpecificData: hexify(dataView, nextOffset, length)
         };
     } else {
         throw new Error(`Cannot parse a meta event with a type of "${ metaTypeByte.toString(16) }"`);
