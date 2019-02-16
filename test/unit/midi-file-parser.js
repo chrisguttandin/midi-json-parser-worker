@@ -11,7 +11,8 @@ describe('midiFileParser', () => {
             [ 'MIDIOkFormat2' ],
             [ 'scale' ],
             [ 'SubTractor 1' ],
-            [ 'SubTractor 2' ]
+            [ 'SubTractor 2' ],
+            [ 'test8bars' ]
         ], (filename) => {
 
             it('should parse the midi file', function (done) {
