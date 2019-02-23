@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiSequencerSpecificEvent extends IMidiEvent {
+export interface IMidiSequencerSpecificEvent extends IMidiMetaEvent {
 
     sequencerSpecificData: string;
 

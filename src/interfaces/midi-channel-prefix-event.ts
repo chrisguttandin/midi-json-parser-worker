@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiChannelPrefixEvent extends IMidiEvent {
+export interface IMidiChannelPrefixEvent extends IMidiMetaEvent {
 
     channelPrefix: number;
 

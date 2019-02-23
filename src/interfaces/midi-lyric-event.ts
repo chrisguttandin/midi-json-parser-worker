@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiLyricEvent extends IMidiEvent {
+export interface IMidiLyricEvent extends IMidiMetaEvent {
 
     lyric: string;
 

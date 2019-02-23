@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiStatusEvent } from './midi-status-event';
 
-export interface IMidiPitchBendEvent extends IMidiEvent {
+export interface IMidiPitchBendEvent extends IMidiStatusEvent {
 
     pitchBend: number;
 

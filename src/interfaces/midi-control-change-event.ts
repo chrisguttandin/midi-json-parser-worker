@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiStatusEvent } from './midi-status-event';
 
-export interface IMidiControlChangeEvent extends IMidiEvent {
+export interface IMidiControlChangeEvent extends IMidiStatusEvent {
 
     controlChange: {
 

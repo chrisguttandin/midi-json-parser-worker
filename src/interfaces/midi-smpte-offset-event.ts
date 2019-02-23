@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiSmpteOffsetEvent extends IMidiEvent {
+export interface IMidiSmpteOffsetEvent extends IMidiMetaEvent {
 
     smpteOffset: {
 

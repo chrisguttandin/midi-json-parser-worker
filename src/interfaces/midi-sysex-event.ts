@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiStatusEvent } from './midi-status-event';
 
-export interface IMidiSysexEvent extends IMidiEvent {
+export interface IMidiSysexEvent extends IMidiStatusEvent {
 
     sysex: string;
 

@@ -1,6 +1,6 @@
 import { IValueMap } from 'worker-factory';
 
-export interface IMidiEvent extends IValueMap {
+export interface IMidiStatusEvent extends IValueMap {
 
     channel: number;
 

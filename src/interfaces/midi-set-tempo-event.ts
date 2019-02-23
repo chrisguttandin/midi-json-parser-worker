@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiSetTempoEvent extends IMidiEvent {
+export interface IMidiSetTempoEvent extends IMidiMetaEvent {
 
     setTempo: {
 

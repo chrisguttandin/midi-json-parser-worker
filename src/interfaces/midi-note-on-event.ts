@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiStatusEvent } from './midi-status-event';
 
-export interface IMidiNoteOnEvent extends IMidiEvent {
+export interface IMidiNoteOnEvent extends IMidiStatusEvent {
 
     noteOn: {
 

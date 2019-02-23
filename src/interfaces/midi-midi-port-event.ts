@@ -1,6 +1,6 @@
-import { IMidiEvent } from './midi-event';
+import { IMidiMetaEvent } from './midi-meta-event';
 
-export interface IMidiMidiPortEvent extends IMidiEvent {
+export interface IMidiMidiPortEvent extends IMidiMetaEvent {
 
     midiPort: number;
 
