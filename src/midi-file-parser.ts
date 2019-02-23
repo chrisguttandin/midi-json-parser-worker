@@ -1,3 +1,4 @@
+import { isMidiStatusEvent } from './guards/midi-status-event';
 import { hexify } from './helpers/hexify';
 import { stringify } from './helpers/stringify';
 import {
@@ -47,7 +48,11 @@ export const parseArrayBuffer = (arrayBuffer: ArrayBuffer) => {
     };
 };
 
-const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent; offset: number } => {
+const _parseEvent = (
+    dataView: DataView,
+    offset: number,
+    lastStatusByte: null | number
+): { event: TMidiEvent; eventTypeByte: number; offset: number } => {
     let result: { event: TMidiEvent; offset: number };
 
     const { offset: nextOffset, value: delta } = _readVariableLengthQuantity( // tslint:disable-line:no-use-before-declare
@@ -62,12 +67,10 @@ const _parseEvent = (dataView: DataView, offset: number, lastEvent: null | TMidi
     } else if (eventTypeByte === 0xFF) { // tslint:disable-line:no-bitwise
         result = _parseMetaEvent(dataView, nextOffset + 1); // tslint:disable-line:no-use-before-declare
     } else {
-        result = _parseMidiEvent(eventTypeByte, dataView, nextOffset + 1, lastEvent); // tslint:disable-line:no-use-before-declare
+        result = _parseMidiEvent(eventTypeByte, dataView, nextOffset + 1, lastStatusByte); // tslint:disable-line:no-use-before-declare
     }
 
-    result.event.delta = delta;
-
-    return result;
+    return { ...result, event: { ...result.event, delta }, eventTypeByte };
 };
 
 const _parseHeaderChunk = (dataView: DataView) => {
@@ -209,16 +212,19 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
     };
 };
 
-const _parseMidiEvent =
-        (statusByte: number, dataView: DataView, offset: number, lastEvent: null | TMidiEvent): { event: TMidiEvent; offset: number } => {
-    const eventType = statusByte >> 4; // tslint:disable-line:no-bitwise
-    const sanitizedLastEvent = ((statusByte & 0x80) === 0) ? lastEvent : null; // tslint:disable-line:no-bitwise
-    const isRunningStatus = sanitizedLastEvent !== null; // tslint:disable-line:no-bitwise
+const _parseMidiEvent = (
+    statusByte: number,
+    dataView: DataView,
+    offset: number,
+    lastStatusByte: null | number
+): { event: TMidiEvent; offset: number } => {
+    const sanitizedLastStatusByte = ((statusByte & 0x80) === 0) ? lastStatusByte : null; // tslint:disable-line:no-bitwise
+    const eventType = ((sanitizedLastStatusByte === null) ? statusByte : sanitizedLastStatusByte) >> 4; // tslint:disable-line:no-bitwise
 
     let event: TMidiStatusEvent;
-    let sanitizedOffset = isRunningStatus ? offset - 1 : offset; // tslint:disable-line:no-bitwise
+    let sanitizedOffset = (sanitizedLastStatusByte === null) ? offset : offset - 1; // tslint:disable-line:no-bitwise
 
-    if (eventType === 0x08 || (isRunningStatus && 'noteOff' in <TMidiStatusEvent> sanitizedLastEvent)) { // tslint:disable-line:no-bitwise
+    if (eventType === 0x08) { // tslint:disable-line:no-bitwise
         event = <IMidiNoteOffEvent> {
             noteOff: {
                 noteNumber: dataView.getUint8(sanitizedOffset),
@@ -227,9 +233,8 @@ const _parseMidiEvent =
         };
 
         sanitizedOffset += 2;
-    } else if (eventType === 0x09 || (isRunningStatus && 'noteOn' in <TMidiStatusEvent> sanitizedLastEvent)) { // tslint:disable-line:no-bitwise
+    } else if (eventType === 0x09) { // tslint:disable-line:no-bitwise
         const noteNumber = dataView.getUint8(sanitizedOffset);
-
         const velocity = dataView.getUint8(sanitizedOffset + 1);
 
         if (velocity === 0) {
@@ -249,8 +254,7 @@ const _parseMidiEvent =
         }
 
         sanitizedOffset += 2;
-    } else if (eventType === 0x0B
-            || (isRunningStatus && 'controlChange' in <TMidiStatusEvent> sanitizedLastEvent)) { // tslint:disable-line:no-bitwise
+    } else if (eventType === 0x0B) { // tslint:disable-line:no-bitwise
         event = <IMidiControlChangeEvent> {
             controlChange: {
                 type: dataView.getUint8(sanitizedOffset),
@@ -259,8 +263,7 @@ const _parseMidiEvent =
         };
 
         sanitizedOffset += 2;
-    } else if (eventType === 0x0C
-            || (isRunningStatus && 'programChange' in <TMidiStatusEvent> sanitizedLastEvent)) { // tslint:disable-line:no-bitwise
+    } else if (eventType === 0x0C) { // tslint:disable-line:no-bitwise
         event = <IMidiProgramChangeEvent> {
             programChange: {
                 programNumber: dataView.getUint8(sanitizedOffset)
@@ -268,8 +271,7 @@ const _parseMidiEvent =
         };
 
         sanitizedOffset += 1;
-    } else if (eventType === 0x0E
-            || (isRunningStatus && 'pitchBend' in <TMidiStatusEvent> sanitizedLastEvent)) { // tslint:disable-line:no-bitwise
+    } else if (eventType === 0x0E) { // tslint:disable-line:no-bitwise
         event = <IMidiPitchBendEvent> {
             pitchBend: dataView.getUint8(sanitizedOffset) | (dataView.getUint8(sanitizedOffset + 1) << 7) // tslint:disable-line:no-bitwise
         };
@@ -279,7 +281,7 @@ const _parseMidiEvent =
         throw new Error(`Cannot parse a midi event with a type of "${ eventType.toString(16) }"`);
     }
 
-    event.channel = (isRunningStatus) ? (<TMidiStatusEvent> sanitizedLastEvent).channel : statusByte & 0x0F;  // tslint:disable-line:no-bitwise
+    event.channel = ((sanitizedLastStatusByte === null) ? statusByte : sanitizedLastStatusByte) & 0x0F;  // tslint:disable-line:no-bitwise
 
     return { event, offset: sanitizedOffset };
 };
@@ -306,13 +308,19 @@ const _parseTrackChunk = (dataView: DataView, offset: number) => {
     const events = [];
     const length = dataView.getUint32(offset + 4) + offset + 8;
 
-    let event: null | TMidiEvent = null;
+    let lastStatusByte: null | number = null;
     let nextOffset = offset + 8;
 
     while (nextOffset < length) {
-        ({ event, offset: nextOffset } = _parseEvent(dataView, nextOffset, event));
+        const result = _parseEvent(dataView, nextOffset, lastStatusByte);
+        const { event, eventTypeByte } = result;
 
         events.push(event);
+        nextOffset = result.offset;
+
+        if (isMidiStatusEvent(event) && ((eventTypeByte & 0x80) > 0)) { // tslint:disable-line:no-bitwise
+            lastStatusByte = eventTypeByte;
+        }
     }
 
     return {
