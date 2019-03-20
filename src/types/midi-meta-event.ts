@@ -13,7 +13,8 @@ import {
     IMidiSmpteOffsetEvent,
     IMidiTextEvent,
     IMidiTimeSignatureEvent,
-    IMidiTrackNameEvent
+    IMidiTrackNameEvent,
+    IMidiUnknownTextEvent
 } from '../interfaces';
 
 export type TMidiMetaEvent = IMidiChannelPrefixEvent
@@ -30,4 +31,5 @@ export type TMidiMetaEvent = IMidiChannelPrefixEvent
     | IMidiSmpteOffsetEvent
     | IMidiTextEvent
     | IMidiTimeSignatureEvent
-    | IMidiTrackNameEvent;
+    | IMidiTrackNameEvent
+    | IMidiUnknownTextEvent;

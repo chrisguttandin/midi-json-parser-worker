@@ -1,5 +1,6 @@
 import { isMidiStatusEvent } from './guards/midi-status-event';
 import { hexify } from './helpers/hexify';
+import { hexifyNumber } from './helpers/hexify-number';
 import { stringify } from './helpers/stringify';
 import {
     IMidiChannelPrefixEvent,
@@ -22,7 +23,8 @@ import {
     IMidiSysexEvent,
     IMidiTextEvent,
     IMidiTimeSignatureEvent,
-    IMidiTrackNameEvent
+    IMidiTrackNameEvent,
+    IMidiUnknownTextEvent
 } from './interfaces';
 import { TMidiEvent, TMidiMetaEvent, TMidiStatusEvent } from './types';
 
@@ -133,6 +135,16 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
     } else if (metaTypeByte === 0x08) { // tslint:disable-line:no-bitwise
         event = <IMidiProgramNameEvent> {
             programName: stringify(dataView, nextOffset, length)
+        };
+    } else if (metaTypeByte === 0x0A
+            || metaTypeByte === 0x0B
+            || metaTypeByte === 0x0C
+            || metaTypeByte === 0x0D
+            || metaTypeByte === 0x0E
+            || metaTypeByte === 0x0F) { // tslint:disable-line:no-bitwise
+        event = <IMidiUnknownTextEvent> {
+            metaTypeByte: hexifyNumber(metaTypeByte),
+            text: stringify(dataView, nextOffset, length)
         };
     } else if (metaTypeByte === 0x20) { // tslint:disable-line:no-bitwise
         event = <IMidiChannelPrefixEvent> {

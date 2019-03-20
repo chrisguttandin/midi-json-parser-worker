@@ -23,3 +23,4 @@ export * from './midi-sysex-event';
 export * from './midi-text-event';
 export * from './midi-time-signature-event';
 export * from './midi-track-name-event';
+export * from './midi-unknown-text-event';
