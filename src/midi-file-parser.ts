@@ -15,6 +15,7 @@ import {
     IMidiNoteOnEvent,
     IMidiPitchBendEvent,
     IMidiProgramChangeEvent,
+    IMidiProgramNameEvent,
     IMidiSequencerSpecificEvent,
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
@@ -128,6 +129,10 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
     } else if (metaTypeByte === 0x06) { // tslint:disable-line:no-bitwise
         event = <IMidiMarkerEvent> {
             marker: stringify(dataView, nextOffset, length)
+        };
+    } else if (metaTypeByte === 0x08) { // tslint:disable-line:no-bitwise
+        event = <IMidiProgramNameEvent> {
+            programName: stringify(dataView, nextOffset, length)
         };
     } else if (metaTypeByte === 0x20) { // tslint:disable-line:no-bitwise
         event = <IMidiChannelPrefixEvent> {

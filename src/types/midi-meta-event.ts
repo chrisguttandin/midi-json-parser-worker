@@ -7,6 +7,7 @@ import {
     IMidiLyricEvent,
     IMidiMarkerEvent,
     IMidiMidiPortEvent,
+    IMidiProgramNameEvent,
     IMidiSequencerSpecificEvent,
     IMidiSetTempoEvent,
     IMidiSmpteOffsetEvent,
@@ -23,6 +24,7 @@ export type TMidiMetaEvent = IMidiChannelPrefixEvent
     | IMidiLyricEvent
     | IMidiMarkerEvent
     | IMidiMidiPortEvent
+    | IMidiProgramNameEvent
     | IMidiSequencerSpecificEvent
     | IMidiSetTempoEvent
     | IMidiSmpteOffsetEvent
