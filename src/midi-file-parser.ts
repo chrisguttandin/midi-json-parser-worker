@@ -6,6 +6,7 @@ import {
     IMidiChannelPrefixEvent,
     IMidiControlChangeEvent,
     IMidiCopyrightNoticeEvent,
+    IMidiDeviceNameEvent,
     IMidiEndOfTrackEvent,
     IMidiInstrumentNameEvent,
     IMidiKeySignatureEvent,
@@ -135,6 +136,10 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
     } else if (metaTypeByte === 0x08) { // tslint:disable-line:no-bitwise
         event = <IMidiProgramNameEvent> {
             programName: stringify(dataView, nextOffset, length)
+        };
+    } else if (metaTypeByte === 0x09) { // tslint:disable-line:no-bitwise
+        event = <IMidiDeviceNameEvent> {
+            deviceName: stringify(dataView, nextOffset, length)
         };
     } else if (metaTypeByte === 0x0A
             || metaTypeByte === 0x0B
