@@ -1,4 +1,5 @@
 export * from './midi-channel-prefix-event';
+export * from './midi-channel-pressure-event';
 export * from './midi-copyright-notice-event';
 export * from './midi-control-change-event';
 export * from './midi-device-name-event';

@@ -4,6 +4,7 @@ import { hexifyNumber } from './helpers/hexify-number';
 import { stringify } from './helpers/stringify';
 import {
     IMidiChannelPrefixEvent,
+    IMidiChannelPressureEvent,
     IMidiControlChangeEvent,
     IMidiCopyrightNoticeEvent,
     IMidiDeviceNameEvent,
@@ -298,6 +299,15 @@ const _parseMidiEvent = (
         };
 
         sanitizedOffset += 1;
+    } else if (eventType === 0x0D) { // tslint:disable-line:no-bitwise
+        event = <IMidiChannelPressureEvent> {
+            channelPressure: {
+                noteNumber: dataView.getUint8(sanitizedOffset),
+                pressure: dataView.getUint8(sanitizedOffset + 1)
+            }
+        };
+
+        sanitizedOffset += 2;
     } else if (eventType === 0x0E) { // tslint:disable-line:no-bitwise
         event = <IMidiPitchBendEvent> {
             pitchBend: dataView.getUint8(sanitizedOffset) | (dataView.getUint8(sanitizedOffset + 1) << 7) // tslint:disable-line:no-bitwise

@@ -1,4 +1,5 @@
 import {
+    IMidiChannelPressureEvent,
     IMidiControlChangeEvent,
     IMidiNoteOffEvent,
     IMidiNoteOnEvent,
@@ -7,7 +8,8 @@ import {
     IMidiSysexEvent
 } from '../interfaces';
 
-export type TMidiStatusEvent = IMidiControlChangeEvent |
+export type TMidiStatusEvent = IMidiChannelPressureEvent |
+    IMidiControlChangeEvent |
     IMidiNoteOffEvent |
     IMidiNoteOnEvent |
     IMidiPitchBendEvent |
