@@ -10,6 +10,7 @@ import {
     IMidiDeviceNameEvent,
     IMidiEndOfTrackEvent,
     IMidiInstrumentNameEvent,
+    IMidiKeyPressureEvent,
     IMidiKeySignatureEvent,
     IMidiLyricEvent,
     IMidiMarkerEvent,
@@ -282,6 +283,14 @@ const _parseMidiEvent = (
         }
 
         sanitizedOffset += 2;
+    } else if (eventType === 0x0A) { // tslint:disable-line:no-bitwise
+        event = <IMidiKeyPressureEvent> {
+            keyPressure: {
+                pressure: dataView.getUint8(sanitizedOffset)
+            }
+        };
+
+        sanitizedOffset += 1;
     } else if (eventType === 0x0B) { // tslint:disable-line:no-bitwise
         event = <IMidiControlChangeEvent> {
             controlChange: {

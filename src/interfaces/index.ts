@@ -7,6 +7,7 @@ export * from './midi-end-of-track-event';
 export * from './midi-file';
 export * from './midi-instrument-name-event';
 export * from './midi-json-parser-worker-custom-definition';
+export * from './midi-key-pressure-event';
 export * from './midi-key-signature-event';
 export * from './midi-lyric-event';
 export * from './midi-marker-event';

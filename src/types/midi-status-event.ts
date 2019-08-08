@@ -1,6 +1,7 @@
 import {
     IMidiChannelPressureEvent,
     IMidiControlChangeEvent,
+    IMidiKeyPressureEvent,
     IMidiNoteOffEvent,
     IMidiNoteOnEvent,
     IMidiPitchBendEvent,
@@ -10,6 +11,7 @@ import {
 
 export type TMidiStatusEvent = IMidiChannelPressureEvent |
     IMidiControlChangeEvent |
+    IMidiKeyPressureEvent |
     IMidiNoteOffEvent |
     IMidiNoteOnEvent |
     IMidiPitchBendEvent |
