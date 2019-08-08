@@ -232,7 +232,7 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
             sequencerSpecificData: hexify(dataView, nextOffset, length)
         };
     } else {
-        throw new Error(`Cannot parse a meta event with a type of "${ metaTypeByte.toString(16) }"`);
+        throw new Error(`Cannot parse a meta event with a type of "${ hexifyNumber(metaTypeByte) }"`);
     }
 
     return {
@@ -324,7 +324,7 @@ const _parseMidiEvent = (
 
         sanitizedOffset += 2;
     } else {
-        throw new Error(`Cannot parse a midi event with a type of "${ eventType.toString(16) }"`);
+        throw new Error(`Cannot parse a midi event with a type of "${ hexifyNumber(eventType) }"`);
     }
 
     event.channel = ((sanitizedLastStatusByte === null) ? statusByte : sanitizedLastStatusByte) & 0x0F;  // tslint:disable-line:no-bitwise
