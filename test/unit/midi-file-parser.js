@@ -22,34 +22,44 @@ describe('midiFileParser', () => {
             [ 'test8bars' ]
         ], (filename) => {
 
-            it('should parse the midi file', function (done) {
-                this.timeout(6000);
+            describe('with a midi file', () => {
 
-                loadFixtureAsJson(filename + '.json', (err, json) => {
-                    expect(err).to.be.null;
+                let arrayBuffer;
+                let midiFile;
 
-                    loadFixtureAsArrayBuffer(filename + '.mid', (rr, arrayBuffer) => {
-                        expect(rr).to.be.null;
+                beforeEach(async function () {
+                    this.timeout(6000);
 
-                        expect(midiFileParser.parseArrayBuffer(arrayBuffer)).to.deep.equal(json);
-
-                        done();
-                    });
+                    arrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.mid`);
+                    midiFile = await loadFixtureAsJson(`${ filename }.json`);
                 });
+
+                it('should parse the file', function () {
+                    this.timeout(6000);
+
+                    expect(midiFileParser.parseArrayBuffer(arrayBuffer)).to.deep.equal(midiFile);
+                });
+
             });
 
-            it('should refuse to parse a none midi file', function (done) {
-                this.timeout(6000);
+            describe('with a json file', () => {
 
-                loadFixtureAsArrayBuffer(filename + '.json', (err, arrayBuffer) => {
-                    expect(err).to.be.null;
+                let arrayBuffer;
+
+                beforeEach(async function () {
+                    this.timeout(6000);
+
+                    arrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.json`);
+                });
+
+                it('should refuse to parse the file', function () {
+                    this.timeout(6000);
 
                     expect(() => {
                         midiFileParser.parseArrayBuffer(arrayBuffer);
                     }).to.throw(Error, 'Unexpected characters "{\n  " found instead of "MThd"');
-
-                    done();
                 });
+
             });
 
         });
