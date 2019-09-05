@@ -2,7 +2,7 @@ export const loadFixtureAsArrayBuffer = (fixture, callback) => {
     const request = new XMLHttpRequest();
 
     request.onerror = function () {
-        callback('request-failed');
+        callback(new Error('The request failed.'));
     };
     request.onload = function (event) {
         callback(null, event.target.response);
@@ -16,13 +16,13 @@ export const loadFixtureAsJson = (fixture, callback) => {
     const request = new XMLHttpRequest();
 
     request.onerror = function () {
-        callback('request-failed');
+        callback(new Error('The request failed.'));
     };
     request.onload = function (event) {
         try {
             callback(null, JSON.parse(event.target.response));
         } catch (err) {
-            callback('request-failed');
+            callback(new Error('The request failed.'));
         }
     };
     request.open('GET', '/base/test/fixtures/' + fixture);
