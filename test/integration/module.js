@@ -38,14 +38,14 @@ describe('module', () => {
             let midiFile;
 
             beforeEach(async function () {
-                this.timeout(6000);
+                this.timeout(10000);
 
                 arrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.mid`);
                 midiFile = await loadFixtureAsJson(`${ filename }.json`);
             });
 
             it('should parse the file', function (done) {
-                this.timeout(6000);
+                this.timeout(10000);
 
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
@@ -72,13 +72,13 @@ describe('module', () => {
             let arrayBuffer;
 
             beforeEach(async function () {
-                this.timeout(6000);
+                this.timeout(10000);
 
                 arrayBuffer = await loadFixtureAsArrayBuffer(`${ filename }.json`);
             });
 
             it('should refuse to parse the file', function (done) {
-                this.timeout(6000);
+                this.timeout(10000);
 
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
