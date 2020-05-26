@@ -174,7 +174,7 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
 
         event = <IMidiSetTempoEvent> {
             setTempo: {
-                microsecondsPerBeat: (
+                microsecondsPerQuarter: (
                     (dataView.getUint8(nextOffset) << 16) + // tslint:disable-line:no-bitwise
                     (dataView.getUint8(nextOffset + 1) << 8) + // tslint:disable-line:no-bitwise
                     dataView.getUint8(nextOffset + 2)
