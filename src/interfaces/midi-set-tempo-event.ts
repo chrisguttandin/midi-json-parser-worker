@@ -4,7 +4,7 @@ export interface IMidiSetTempoEvent extends IMidiMetaEvent {
 
     setTempo: {
 
-        microsecondsPerBeat: number;
+        microsecondsPerQuarter: number;
 
     };
 
