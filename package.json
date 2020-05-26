@@ -8,6 +8,12 @@
       "path": "cz-conventional-changelog"
     }
   },
+  "contributors": [
+    {
+      "email": "mittiprovence@yahoo.se",
+      "name": "Stephane Eybert"
+    }
+  ],
   "dependencies": {
     "@babel/runtime": "^7.10.0",
     "tslib": "^2.0.0",
