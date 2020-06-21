@@ -1,9 +1,7 @@
 import { IMidiMetaEvent } from './midi-meta-event';
 
 export interface IMidiSmpteOffsetEvent extends IMidiMetaEvent {
-
     smpteOffset: {
-
         frame: number;
 
         frameRate: number;
@@ -15,7 +13,5 @@ export interface IMidiSmpteOffsetEvent extends IMidiMetaEvent {
         seconds: number;
 
         subFrame: number;
-
     };
-
 }

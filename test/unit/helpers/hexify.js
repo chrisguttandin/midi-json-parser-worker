@@ -1,11 +1,10 @@
 import { hexify } from '../../../src/helpers/hexify';
 
 describe('hexify()', () => {
-
     let dataView;
 
     beforeEach(() => {
-        const uint8Array = new Uint8Array([ 1, 2, 3 ]);
+        const uint8Array = new Uint8Array([1, 2, 3]);
 
         dataView = new DataView(uint8Array.buffer);
     });
@@ -21,5 +20,4 @@ describe('hexify()', () => {
     it('should hexify the given buffer with the specified lengtht', () => {
         expect(hexify(dataView, 0, 2)).to.equal('0102');
     });
-
 });

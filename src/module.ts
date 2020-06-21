@@ -9,7 +9,7 @@ import { parseArrayBuffer } from './midi-file-parser';
 export * from './interfaces/index';
 export * from './types/index';
 
-createWorker<IMidiJsonParserWorkerCustomDefinition>(self, <TWorkerImplementation<IMidiJsonParserWorkerCustomDefinition>> {
+createWorker<IMidiJsonParserWorkerCustomDefinition>(self, <TWorkerImplementation<IMidiJsonParserWorkerCustomDefinition>>{
     parse: ({ arrayBuffer }) => {
         const midiFile = parseArrayBuffer(arrayBuffer);
 

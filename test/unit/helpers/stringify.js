@@ -1,11 +1,10 @@
 import { stringify } from '../../../src/helpers/stringify';
 
 describe('stringify()', () => {
-
     let dataView;
 
     beforeEach(() => {
-        const uint8Array = new Uint8Array([ 65, 66, 67 ]);
+        const uint8Array = new Uint8Array([65, 66, 67]);
 
         dataView = new DataView(uint8Array.buffer);
     });
@@ -21,5 +20,4 @@ describe('stringify()', () => {
     it('should stringify the given buffer with the specified lengtht', () => {
         expect(stringify(dataView, 0, 2)).to.equal('AB');
     });
-
 });

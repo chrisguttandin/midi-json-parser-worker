@@ -9,7 +9,8 @@ import {
     IMidiSysexEvent
 } from '../interfaces';
 
-export type TMidiStatusEvent = IMidiChannelPressureEvent
+export type TMidiStatusEvent =
+    | IMidiChannelPressureEvent
     | IMidiControlChangeEvent
     | IMidiKeyPressureEvent
     | IMidiNoteOffEvent

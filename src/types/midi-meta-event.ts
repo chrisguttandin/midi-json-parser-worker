@@ -18,7 +18,8 @@ import {
     IMidiUnknownTextEvent
 } from '../interfaces';
 
-export type TMidiMetaEvent = IMidiChannelPrefixEvent
+export type TMidiMetaEvent =
+    | IMidiChannelPrefixEvent
     | IMidiCopyrightNoticeEvent
     | IMidiDeviceNameEvent
     | IMidiEndOfTrackEvent
