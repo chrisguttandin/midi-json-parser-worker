@@ -3,6 +3,11 @@ import { IMidiJsonParserWorkerCustomDefinition } from './interfaces';
 import { parseArrayBuffer } from './midi-file-parser';
 
 /*
+ * This export can provide Node.js support
+ */
+export { parseArrayBuffer } from './midi-file-parser';
+
+/*
  * @todo Explicitly referencing the barrel file seems to be necessary when enabling the
  * isolatedModules compiler option.
  */
