@@ -315,11 +315,12 @@ const _parseMidiEvent = (
         // tslint:disable-line:no-bitwise
         event = <IMidiKeyPressureEvent>{
             keyPressure: {
-                pressure: dataView.getUint8(sanitizedOffset)
+                noteNumber: dataView.getUint8(sanitizedOffset),
+                pressure: dataView.getUint8(sanitizedOffset + 1)
             }
         };
 
-        sanitizedOffset += 1;
+        sanitizedOffset += 2;
     } else if (eventType === 0x0b) {
         // tslint:disable-line:no-bitwise
         event = <IMidiControlChangeEvent>{
@@ -343,12 +344,11 @@ const _parseMidiEvent = (
         // tslint:disable-line:no-bitwise
         event = <IMidiChannelPressureEvent>{
             channelPressure: {
-                noteNumber: dataView.getUint8(sanitizedOffset),
-                pressure: dataView.getUint8(sanitizedOffset + 1)
+                pressure: dataView.getUint8(sanitizedOffset)
             }
         };
 
-        sanitizedOffset += 2;
+        sanitizedOffset += 1;
     } else if (eventType === 0x0e) {
         // tslint:disable-line:no-bitwise
         event = <IMidiPitchBendEvent>{
