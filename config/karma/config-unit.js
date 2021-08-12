@@ -19,7 +19,7 @@ module.exports = (config) => {
                 },
                 mocha: {
                     bail: true,
-                    timeout: 4000
+                    timeout: 20000
                 },
                 pattern: [
                     '/absolute**',
