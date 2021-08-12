@@ -11,6 +11,13 @@ module.exports = (config) => {
 
         browserNoActivityTimeout: 100000,
 
+        client: {
+            mocha: {
+                bail: true,
+                timeout: 4000
+            }
+        },
+
         concurrency: 1,
 
         files: [

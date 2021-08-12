@@ -17,6 +17,10 @@ module.exports = (config) => {
                         self.expect = self.chai.expect;
                     })(self);`
                 },
+                mocha: {
+                    bail: true,
+                    timeout: 4000
+                },
                 pattern: [
                     '/absolute**',
                     '/absolute/**',
