@@ -7,6 +7,7 @@ import {
     IMidiChannelPressureEvent,
     IMidiControlChangeEvent,
     IMidiCopyrightNoticeEvent,
+    IMidiCuePointEvent,
     IMidiDeviceNameEvent,
     IMidiEndOfTrackEvent,
     IMidiInstrumentNameEvent,
@@ -144,6 +145,11 @@ const _parseMetaEvent = (dataView: DataView, offset: number): { event: TMidiMeta
         // tslint:disable-line:no-bitwise
         event = <IMidiMarkerEvent>{
             marker: stringify(dataView, nextOffset, length)
+        };
+    } else if (metaTypeByte === 0x07) {
+        // tslint:disable-line:no-bitwise
+        event = <IMidiCuePointEvent>{
+            cuePoint: stringify(dataView, nextOffset, length)
         };
     } else if (metaTypeByte === 0x08) {
         // tslint:disable-line:no-bitwise

@@ -1,6 +1,7 @@
 import {
     IMidiChannelPrefixEvent,
     IMidiCopyrightNoticeEvent,
+    IMidiCuePointEvent,
     IMidiDeviceNameEvent,
     IMidiEndOfTrackEvent,
     IMidiInstrumentNameEvent,
@@ -21,6 +22,7 @@ import {
 export type TMidiMetaEvent =
     | IMidiChannelPrefixEvent
     | IMidiCopyrightNoticeEvent
+    | IMidiCuePointEvent
     | IMidiDeviceNameEvent
     | IMidiEndOfTrackEvent
     | IMidiInstrumentNameEvent
