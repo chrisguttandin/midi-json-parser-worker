@@ -1,4 +1,5 @@
 import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixture';
+import { filenames } from '../helper/filenames';
 
 describe('module', () => {
     afterEach((done) => {
@@ -6,103 +7,83 @@ describe('module', () => {
         setTimeout(done, 1000);
     });
 
-    leche.withData(
-        [
-            ['26-2'],
-            ['98137'],
-            ['A_F_NO7_01'],
-            ['MIDIOkFormat1-lyrics'],
-            ['MIDIOkFormat2'],
-            ['MorozovS07'],
-            ['SubTractor 1'],
-            ['SubTractor 2'],
-            ['TheEntertainer'],
-            ['because'],
-            ['californication'],
-            ['minute_waltz'],
-            ['rachmaninov3'],
-            ['scale'],
-            ['test'],
-            ['test8bars']
-        ],
-        (filename) => {
-            let id;
-            let worker;
+    for (const filename of filenames) {
+        let id;
+        let worker;
 
-            beforeEach(() => {
-                id = 63;
+        beforeEach(() => {
+            id = 63;
 
-                worker = new Worker('base/src/module.js');
+            worker = new Worker('base/src/module.js');
+        });
+
+        describe('with a midi file', () => {
+            let arrayBuffer;
+            let midiFile;
+
+            beforeEach(async function () {
+                this.timeout(10000);
+
+                arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.mid`);
+                midiFile = await loadFixtureAsJson(`${filename}.json`);
             });
 
-            describe('with a midi file', () => {
-                let arrayBuffer;
-                let midiFile;
+            it('should parse the file', function (done) {
+                this.timeout(10000);
 
-                beforeEach(async function () {
-                    this.timeout(10000);
-
-                    arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.mid`);
-                    midiFile = await loadFixtureAsJson(`${filename}.json`);
-                });
-
-                it('should parse the file', function (done) {
-                    this.timeout(10000);
-
-                    worker.addEventListener('message', ({ data }) => {
-                        expect(data).to.deep.equal({
-                            id,
-                            result: midiFile
-                        });
-
-                        done();
+                worker.addEventListener('message', ({ data }) => {
+                    expect(data).to.deep.equal({
+                        id,
+                        result: midiFile
                     });
 
-                    worker.postMessage(
-                        {
-                            id,
-                            method: 'parse',
-                            params: { arrayBuffer }
-                        },
-                        [arrayBuffer]
-                    );
+                    done();
                 });
+
+                worker.postMessage(
+                    {
+                        id,
+                        method: 'parse',
+                        params: { arrayBuffer }
+                    },
+                    [arrayBuffer]
+                );
+            });
+        });
+
+        describe('with a json file', () => {
+            let arrayBuffer;
+
+            beforeEach(async function () {
+                this.timeout(10000);
+
+                arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.json`);
             });
 
-            describe('with a json file', () => {
-                let arrayBuffer;
+            it('should refuse to parse the file', function (done) {
+                this.timeout(10000);
 
-                beforeEach(async function () {
-                    this.timeout(10000);
-
-                    arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.json`);
-                });
-
-                it('should refuse to parse the file', function (done) {
-                    this.timeout(10000);
-
-                    worker.addEventListener('message', ({ data }) => {
-                        expect(data).to.deep.equal({
-                            error: {
-                                code: -32603,
-                                message: 'Unexpected characters "{\n  " found instead of "MThd"'
-                            },
-                            id
-                        });
-
-                        done();
+                worker.addEventListener('message', ({ data }) => {
+                    expect(data).to.deep.equal({
+                        error: {
+                            code: -32603,
+                            message: 'Unexpected characters "{\n  " found instead of "MThd"'
+                        },
+                        id
                     });
 
-                    worker.postMessage(
-                        {
-                            id,
-                            method: 'parse',
-                            params: { arrayBuffer }
-                        },
-                        [arrayBuffer]
-                    );
+                    done();
                 });
+
+                worker.postMessage(
+                    {
+                        id,
+                        method: 'parse',
+                        params: { arrayBuffer }
+                    },
+                    [arrayBuffer]
+                );
             });
-        }
-    );
+        });
+    }
 });
