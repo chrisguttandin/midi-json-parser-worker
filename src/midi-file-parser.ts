@@ -85,6 +85,10 @@ const _parseEvent = (
 };
 
 const _parseHeaderChunk = (dataView: DataView) => {
+    if (dataView.byteLength < 14) {
+        throw new Error(`Expected at least 14 bytes instead of ${dataView.byteLength}`);
+    }
+
     if (stringify(dataView, 0, 4) !== 'MThd') {
         throw new Error(`Unexpected characters "${stringify(dataView, 0, 4)}" found instead of "MThd"`);
     }
