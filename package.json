@@ -15,7 +15,7 @@
         }
     ],
     "dependencies": {
-        "@babel/runtime": "^7.17.9",
+        "@babel/runtime": "^7.18.0",
         "tslib": "^2.4.0",
         "worker-factory": "^6.0.61"
     },
