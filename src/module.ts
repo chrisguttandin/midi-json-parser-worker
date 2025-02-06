@@ -11,8 +11,6 @@ export * from './types/index';
 
 createWorker<IMidiJsonParserWorkerCustomDefinition>(self, <TWorkerImplementation<IMidiJsonParserWorkerCustomDefinition>>{
     parse: ({ arrayBuffer }) => {
-        const midiFile = parseArrayBuffer(arrayBuffer);
-
-        return { result: midiFile };
+        return { result: parseArrayBuffer(arrayBuffer) };
     }
 });
