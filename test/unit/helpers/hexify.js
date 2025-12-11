@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { hexify } from '../../../src/helpers/hexify';
 
 describe('hexify()', () => {

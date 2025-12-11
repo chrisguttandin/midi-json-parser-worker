@@ -1,6 +1,7 @@
-import * as midiFileParser from '../../src/midi-file-parser';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixture';
 import { filenames } from '../helper/filenames';
+import { parseArrayBuffer } from '../../src/midi-file-parser';
 
 describe('midiFileParser', () => {
     describe('parseArrayBuffer()', () => {
@@ -9,34 +10,26 @@ describe('midiFileParser', () => {
                 let arrayBuffer;
                 let midiFile;
 
-                beforeEach(async function () {
-                    this.timeout(50000);
-
+                beforeEach(async () => {
                     arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.mid`);
                     midiFile = await loadFixtureAsJson(`${filename}.json`);
                 });
 
-                it('should parse the file', function () {
-                    this.timeout(50000);
-
-                    expect(midiFileParser.parseArrayBuffer(arrayBuffer)).to.deep.equal(midiFile);
+                it('should parse the file', () => {
+                    expect(parseArrayBuffer(arrayBuffer)).to.deep.equal(midiFile);
                 });
             });
 
             describe('with a json file', () => {
                 let arrayBuffer;
 
-                beforeEach(async function () {
-                    this.timeout(50000);
-
+                beforeEach(async () => {
                     arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.json`);
                 });
 
-                it('should refuse to parse the file', function () {
-                    this.timeout(50000);
-
+                it('should refuse to parse the file', () => {
                     expect(() => {
-                        midiFileParser.parseArrayBuffer(arrayBuffer);
+                        parseArrayBuffer(arrayBuffer);
                     }).to.throw(Error, 'Unexpected characters "{\n  " found instead of "MThd"');
                 });
             });

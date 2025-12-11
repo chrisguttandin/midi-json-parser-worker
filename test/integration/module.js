@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { loadFixtureAsArrayBuffer, loadFixtureAsJson } from '../helper/load-fixture';
 import { filenames } from '../helper/filenames';
 
@@ -10,7 +11,7 @@ describe('module', () => {
     beforeEach(() => {
         id = 63;
 
-        worker = new Worker('base/src/module.js');
+        worker = new Worker(new URL('../../src/module', import.meta.url), { type: 'module' });
     });
 
     for (const filename of filenames) {
@@ -18,15 +19,13 @@ describe('module', () => {
             let arrayBuffer;
             let midiFile;
 
-            beforeEach(async function () {
-                this.timeout(50000);
-
+            beforeEach(async () => {
                 arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.mid`);
                 midiFile = await loadFixtureAsJson(`${filename}.json`);
             });
 
-            it('should parse the file', function (done) {
-                this.timeout(50000);
+            it('should parse the file', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
@@ -34,7 +33,7 @@ describe('module', () => {
                         result: midiFile
                     });
 
-                    done();
+                    resolve();
                 });
 
                 worker.postMessage(
@@ -45,20 +44,20 @@ describe('module', () => {
                     },
                     [arrayBuffer]
                 );
+
+                return promise;
             });
         });
 
         describe('with a json file', () => {
             let arrayBuffer;
 
-            beforeEach(async function () {
-                this.timeout(50000);
-
+            beforeEach(async () => {
                 arrayBuffer = await loadFixtureAsArrayBuffer(`${filename}.json`);
             });
 
-            it('should refuse to parse the file', function (done) {
-                this.timeout(50000);
+            it('should refuse to parse the file', () => {
+                const { promise, resolve } = Promise.withResolvers();
 
                 worker.addEventListener('message', ({ data }) => {
                     expect(data).to.deep.equal({
@@ -69,7 +68,7 @@ describe('module', () => {
                         id
                     });
 
-                    done();
+                    resolve();
                 });
 
                 worker.postMessage(
@@ -80,6 +79,8 @@ describe('module', () => {
                     },
                     [arrayBuffer]
                 );
+
+                return promise;
             });
         });
     }
@@ -89,8 +90,8 @@ describe('module', () => {
 
         beforeEach(() => (arrayBuffer = new ArrayBuffer(13)));
 
-        it('should refuse to parse the file', function (done) {
-            this.timeout(50000);
+        it('should refuse to parse the file', () => {
+            const { promise, resolve } = Promise.withResolvers();
 
             worker.addEventListener('message', ({ data }) => {
                 expect(data).to.deep.equal({
@@ -101,7 +102,7 @@ describe('module', () => {
                     id
                 });
 
-                done();
+                resolve();
             });
 
             worker.postMessage(
@@ -112,6 +113,8 @@ describe('module', () => {
                 },
                 [arrayBuffer]
             );
+
+            return promise;
         });
     });
 });
